@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -57,7 +58,7 @@ namespace myTimers
                 lastLapTime = timeRightNow;
 
                 tblLapTime = new TextBlock();
-                tblLapTime.Text = myLapTimes.Last().ToString();
+                tblLapTime.Text = convertMsToString(myLapTimes.Last());
                 tblLapTime.HorizontalAlignment = HorizontalAlignment.Center;
 
                 spLapTimes.Children.Add(tblLapTime);
@@ -66,13 +67,46 @@ namespace myTimers
 
         public myStopWatch()
         {
+
             this.InitializeComponent();
-            
+
+        }
+
+        private void MyStopWatch_BackRequested(object sender, BackRequestedEventArgs e)
+        {
+            Frame rootFrame = Window.Current.Content as Frame;
+            if (rootFrame == null)
+                return;
+
+            // Navigate back if possible, and if the event has not 
+            // already been handled .
+            if (rootFrame.CanGoBack && e.Handled == false)
+            {
+                e.Handled = true;
+                rootFrame.GoBack();
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            if( stopWatch == null)
+            Frame rootFrame = Window.Current.Content as Frame;
+            if (rootFrame.CanGoBack)
+            {
+                // Show UI in title bar if opted-in and in-app backstack is not empty.
+                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+                    AppViewBackButtonVisibility.Visible;
+                SystemNavigationManager.GetForCurrentView().BackRequested += MyStopWatch_BackRequested;
+            }
+            else
+            {
+                // Remove the UI from the title bar if in-app back stack is empty.
+                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility =
+                    AppViewBackButtonVisibility.Collapsed;
+            }
+
+
+
+            if ( stopWatch == null)
             {
                 stopWatch = new Stopwatch();
             }
@@ -93,8 +127,14 @@ namespace myTimers
             // some maths division and modulus
             ms = stopWatch.ElapsedMilliseconds;
 
-            ss = ms / 1000;
-            ms = ms % 1000;
+            tblTimeDisplay.Text = convertMsToString(ms);
+
+        }
+
+        private string convertMsToString(long milliSeconds)
+        {
+            ss = milliSeconds / 1000;
+            milliSeconds = milliSeconds % 1000;
 
             mm = ss / 60;
             ss = ss % 60;
@@ -105,11 +145,10 @@ namespace myTimers
             dd = hh / 24;
             hh = hh % 24;
 
-            tblTimeDisplay.Text = hh.ToString("00") + ":" + 
-                                   mm.ToString("00") + ":" + 
-                                   ss.ToString("00") + ":" + 
-                                   ms.ToString("000");
-
+            return (hh.ToString("00") + ":" +
+                    mm.ToString("00") + ":" +
+                    ss.ToString("00") + ":" +
+                    milliSeconds.ToString("000"));
         }
 
         private void btnStartStop_Click(object sender, RoutedEventArgs e)
