@@ -7,9 +7,38 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid x:Name="grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="NormalWindowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="600"/>
+                    </VisualState.StateTriggers>
 
-        <StackPanel HorizontalAlignment="Center" Margin="10" VerticalAlignment="Top" >
+                </VisualState>
+                <VisualState x:Name="NarrowWindowState">
+                    <VisualState.Setters>
+                        <Setter Target="grid.(Panel.Background)">
+                            <Setter.Value>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Black" Offset="0"/>
+                                    <GradientStop Color="#FF596CF6" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="stackPanel.(FrameworkElement.VerticalAlignment)" Value="Bottom"/>
+                        <Setter Target="image.(UIElement.Visibility)" Value="Collapsed"/>
+                    </VisualState.Setters>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <TextBlock x:Name="tblSize" Text="Size: " HorizontalAlignment="Right" VerticalAlignment="Top" 
+                   Style="{StaticResource SubheaderTextBlockStyle}" Width="300" />
+        <StackPanel x:Name="stackPanel" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Top" >
             <TextBlock x:Name="tblTimeDisplay" Text="00:00:00:00:000" Margin="5"
                     HorizontalAlignment="Center" Style="{StaticResource TitleTextBlockStyle}"/>
             <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Center"  >
@@ -18,12 +47,15 @@
                 <Button x:Name="btnLapReset" Content="Reset" Margin="5" Click="btnLapReset_Click" />
             </StackPanel>
         </StackPanel>
-        
+
         <ScrollViewer HorizontalAlignment="Center" Margin="0, 200, 0, 0" HorizontalScrollMode="Disabled" 
                       VerticalAlignment="Top" VerticalScrollMode="Auto">
-            <StackPanel x:Name="spLapTimes" HorizontalAlignment="Center" Margin="5" >
-            </StackPanel>
+            <StackPanel x:Name="spLapTimes" HorizontalAlignment="Center" Margin="5" />
         </ScrollViewer>
+        <Image x:Name="image" 
+               Source="Images/dig.jpg"
+               HorizontalAlignment="Right" 
+               Margin="0,181,115,162" Width="185"/>
 
     </Grid>
 </Page>

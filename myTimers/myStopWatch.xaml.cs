@@ -8,6 +8,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -69,6 +70,24 @@ namespace myTimers
         {
 
             this.InitializeComponent();
+            this.SizeChanged += MyStopWatch_SizeChanged;
+            
+        }
+
+        private void MyStopWatch_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            tblSize.Text = "Size: " + Window.Current.Bounds.Width.ToString();
+            //if( ApplicationView.GetForCurrentView().IsFullScreen  )
+            //{
+            //    VisualStateManager.GoToState(this, "NormalWindowState", true);
+            //}
+            //else
+            //{
+            //    if(Window.Current.Bounds.Width <= 500)
+            //    {
+            //        VisualStateManager.GoToState(this, "NarrowWindowState", true);
+            //    }
+            //}
 
         }
 
@@ -81,7 +100,7 @@ namespace myTimers
             // Navigate back if possible, and if the event has not 
             // already been handled .
             if (rootFrame.CanGoBack && e.Handled == false)
-            {
+            {                
                 e.Handled = true;
                 rootFrame.GoBack();
             }

@@ -7,7 +7,48 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid x:Name="grid">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black" Offset="0"/>
+                <GradientStop Color="#FFD717C4" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="VisualStateGroup">
+                <VisualState x:Name="NormalWindowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="600"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="tblTitlePage.(UIElement.Visibility)" Value="Collapsed"/>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="NarrowWindowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="imgStopWatch.(FrameworkElement.HorizontalAlignment)" Value="Left"/>
+                        <Setter Target="imgStopWatch.(FrameworkElement.VerticalAlignment)" Value="Bottom"/>
+                        <Setter Target="grid.(Panel.Background)">
+                            <Setter.Value>
+                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                    <GradientStop Color="Black" Offset="0"/>
+                                    <GradientStop Color="#FF2D8B35" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Target="tblTitlePage.(UIElement.Visibility)" Value="Visible"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Image x:Name="imgStopWatch" Source="Images/stopwatch-1.png" Height="120" Width="120" Tapped="imgStopWatch_Tapped" />
+        <TextBlock x:Name="tblTitlePage" HorizontalAlignment="Left" 
+                   Height="Auto" Margin="10,184,0,0" Foreground="White" 
+                   Text="Timers by Damien" VerticalAlignment="Center"  
+                   Width="Auto" Style="{StaticResource HeaderTextBlockStyle}"
+                   Visibility="Collapsed" />
     </Grid>
 </Page>
